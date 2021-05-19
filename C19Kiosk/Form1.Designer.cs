@@ -235,9 +235,9 @@ namespace C19Kiosk
             // 
             this.responseText.Font = new System.Drawing.Font("TH K2D July8", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.responseText.ForeColor = System.Drawing.Color.Navy;
-            this.responseText.Location = new System.Drawing.Point(320, 360);
+            this.responseText.Location = new System.Drawing.Point(344, 376);
             this.responseText.Name = "responseText";
-            this.responseText.Size = new System.Drawing.Size(736, 240);
+            this.responseText.Size = new System.Drawing.Size(688, 208);
             this.responseText.TabIndex = 15;
             // 
             // label3

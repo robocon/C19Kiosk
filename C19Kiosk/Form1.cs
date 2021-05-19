@@ -33,7 +33,6 @@ namespace C19Kiosk
         private void Form1_Load(object sender, EventArgs e)
         {
             this.KeyPreview = true; //ตั้งค่าเอาไว้ให้มัน focus ที่ key event
-
             // ฟอร์มโหลด แล้วตั้งเวลาหน่วงไว้ 5วิ
             aTimer = new System.Timers.Timer(5000);
             aTimer.Elapsed += TimerElapsed;
@@ -49,6 +48,7 @@ namespace C19Kiosk
             catch (Exception ex)
             {
                 label1SetText("ไม่พบเครื่องอ่านบัตร Smart Card");
+                Console.WriteLine(ex.Message);
             }
             
         }
@@ -64,7 +64,7 @@ namespace C19Kiosk
         {
             Console.WriteLine("card was inserted");
             label1SetText("กำลังอ่านข้อมูลบัตรประชาชน กรุณารอสักครู่...");
-            
+
             // ดึงค่าจากบัตรประชาชน
             var person = await RunCardReadder();
             if (person == null)
@@ -73,7 +73,7 @@ namespace C19Kiosk
             }
             else
             {
-
+                label1SetText("ระบบกำลังตรวจสอบหมายเลขบัตรประชาชน\nกับข้อมูลของโรงพยาบาล กรุณารอสักครู่...");
                 // ตัวเดิม smConfig.searchOpcardUrl
                 string searchByIdcard = "http://localhost/smbroker/searchOpcardByIdcard.php";
                 string idcard = person.Citizenid;
@@ -92,13 +92,12 @@ namespace C19Kiosk
                             string content = await Task.Run(() => saveVn(resultOpcard.hn));
                             if (!String.IsNullOrEmpty(content))
                             {
-                                label1SetText("ระบบกำลังตรวจสอบหมายเลขบัตรประชาชน");
                                 responseSaveVn app = JsonConvert.DeserializeObject<responseSaveVn>(content);
                                 EpsonSlip es = new EpsonSlip();
                                 es.printOutSlip(app);
-                                label1SetText("");
                                 textBox1.BeginInvoke(new MethodInvoker(delegate { textBox1.Text = ""; }));
                             }
+                            label1SetText("");
                         }
                         else // ถ้าไม่พบ HN
                         {

@@ -122,6 +122,7 @@ namespace C19Kiosk
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 //label1SetText(ex.Message);
             }
         }
@@ -142,6 +143,7 @@ namespace C19Kiosk
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 // responseText.Text = $"Message :{ex.Message}";
             }
             return content;

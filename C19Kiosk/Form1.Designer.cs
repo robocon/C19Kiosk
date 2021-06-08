@@ -51,6 +51,7 @@ namespace C19Kiosk
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.paymentNoti = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -222,7 +223,7 @@ namespace C19Kiosk
             // submitBtn
             // 
             this.submitBtn.Font = new System.Drawing.Font("TH K2D July8", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.submitBtn.Location = new System.Drawing.Point(320, 608);
+            this.submitBtn.Location = new System.Drawing.Point(320, 576);
             this.submitBtn.Name = "submitBtn";
             this.submitBtn.Size = new System.Drawing.Size(415, 120);
             this.submitBtn.TabIndex = 14;
@@ -235,7 +236,7 @@ namespace C19Kiosk
             // 
             this.responseText.Font = new System.Drawing.Font("TH K2D July8", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.responseText.ForeColor = System.Drawing.Color.Navy;
-            this.responseText.Location = new System.Drawing.Point(344, 376);
+            this.responseText.Location = new System.Drawing.Point(336, 360);
             this.responseText.Name = "responseText";
             this.responseText.Size = new System.Drawing.Size(688, 208);
             this.responseText.TabIndex = 15;
@@ -295,6 +296,15 @@ namespace C19Kiosk
             this.pictureBox1.TabIndex = 20;
             this.pictureBox1.TabStop = false;
             // 
+            // paymentNoti
+            // 
+            this.paymentNoti.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.paymentNoti.ForeColor = System.Drawing.Color.Red;
+            this.paymentNoti.Location = new System.Drawing.Point(320, 704);
+            this.paymentNoti.Name = "paymentNoti";
+            this.paymentNoti.Size = new System.Drawing.Size(728, 40);
+            this.paymentNoti.TabIndex = 21;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -302,6 +312,7 @@ namespace C19Kiosk
             this.AutoScroll = true;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1064, 749);
+            this.Controls.Add(this.paymentNoti);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
@@ -358,6 +369,7 @@ namespace C19Kiosk
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label paymentNoti;
     }
 }
 

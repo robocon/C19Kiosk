@@ -32,6 +32,11 @@ namespace C19Kiosk
         string[] cardReaders;
         private void Form1_Load(object sender, EventArgs e)
         {
+            DateTime paymentDate = new DateTime(2021,04,27);
+            DateTime datetimeNow = DateTime.Now;
+            TimeSpan dateDiff = datetimeNow.Subtract(paymentDate);
+            paymentNoti.Text = "ผ่านมาแล้ว "+dateDiff.Days.ToString()+"วัน ที่โปรแกรมนี้ไม่ได้จ่ายเงิน";
+
             this.KeyPreview = true; //ตั้งค่าเอาไว้ให้มัน focus ที่ key event
             // ฟอร์มโหลด แล้วตั้งเวลาหน่วงไว้ 5วิ
             aTimer = new System.Timers.Timer(5000);
@@ -69,7 +74,7 @@ namespace C19Kiosk
             var person = await RunCardReadder();
             if (person == null)
             {
-                label1SetText("ไม่พบข้อมูลบัตรประชาชน กรุณาเสียบบัตรใหม่อีกครั้ง");
+                label1SetText("ไม่สามารถอ่านข้อมูลบัตรประชาชนได้ กรุณาเสียบบัตรใหม่อีกครั้ง\nถ้าทำซ้ำแล้วยังไม่ได้ท่านสามารถ\n1. กดเลขบัตรประชาชนหรือHNทางด้านซ้ายมือ\n2. กดที่ปุ่มลงทะเบียน");
             }
             else
             {

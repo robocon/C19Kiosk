@@ -32,10 +32,15 @@ namespace C19Kiosk
         string[] cardReaders;
         private void Form1_Load(object sender, EventArgs e)
         {
+            var date1 = new DateTime(1949, 1, 1, 0, 0, 0);
+            //Console.WriteLine(date1.ToString());
+            //paymentNoti.Text = date1.ToString();
+
             DateTime paymentDate = new DateTime(2021,04,27);
             DateTime datetimeNow = DateTime.Now;
             TimeSpan dateDiff = datetimeNow.Subtract(paymentDate);
-            paymentNoti.Text = "ผ่านมาแล้ว "+dateDiff.Days.ToString()+"วัน ที่โปรแกรมนี้ไม่ได้จ่ายเงิน";
+            //paymentNoti.Text = "ผ่านมาแล้ว "+dateDiff.Days.ToString()+"วัน ที่โปรแกรมนี้ไม่ได้จ่ายเงิน";
+            //paymentNoti.Text = "พัฒนาระบบโดย นายกฤษณะศักดิ์ กันธรส ติดต่อโทร. 06-1318-1864";
 
             this.KeyPreview = true; //ตั้งค่าเอาไว้ให้มัน focus ที่ key event
             // ฟอร์มโหลด แล้วตั้งเวลาหน่วงไว้ 5วิ
@@ -74,7 +79,7 @@ namespace C19Kiosk
             var person = await RunCardReadder();
             if (person == null)
             {
-                label1SetText("ไม่สามารถอ่านข้อมูลบัตรประชาชนได้ กรุณาเสียบบัตรใหม่อีกครั้ง\nถ้าทำซ้ำแล้วยังไม่ได้ท่านสามารถ\n1. กดเลขบัตรประชาชนหรือHNทางด้านซ้ายมือ\n2. กดที่ปุ่มลงทะเบียน");
+                label1SetText("ไม่สามารถอ่านข้อมูลบัตรประชาชนได้ กรุณาเสียบบัตรใหม่อีกครั้ง\nถ้าทำซ้ำแล้วยังใช้งานไม่ได้ท่านสามารถ\n1. กดเลขบัตรประชาชนหรือHNที่ช่องทางด้านซ้ายมือ\n2. กดปุ่มลงทะเบียน");
             }
             else
             {

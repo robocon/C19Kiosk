@@ -171,6 +171,7 @@ namespace C19Kiosk
                 printer.Append(PartialCut);
                 // ตัดกระดาษ
 
+                /*
                 printer.Image(DrawTextImg("บัตรคิวสำหรับผู้ป่วย ", fontBoldUnderline));
                 printer.NewLine();
                 printer.Image(DrawTextImg("คิวฉีดวัคซีนที่ ", fontBold));
@@ -189,6 +190,7 @@ namespace C19Kiosk
                 
                 printer.NewLines(8);
                 printer.Append(PartialCut);
+                */ 
 
                 //////
                 if (app.queueStatus == "y")

@@ -87,6 +87,39 @@ namespace C19Kiosk
                 // ตัวเดิม smConfig.searchOpcardUrl
                 string searchByIdcard = "http://localhost/smbroker/searchOpcardByIdcard.php";
                 string idcard = person.Citizenid;
+
+                // คำนวณอายุ
+                int enDay = int.Parse(person.Birthday.ToString("dd"));
+                int enMonth = int.Parse(person.Birthday.ToString("MM"));
+                int enYear = int.Parse(person.Birthday.ToString("yyyy")) - 543;
+                /*string birthDayEn = person.Birthday.ToString("dd/MM") + "/" + enYear.ToString();*/
+
+                DateTime dateOfBirth = new DateTime(enYear, enMonth, enDay);
+                CalculateAge(dateOfBirth, out enYear, out enMonth, out enDay);
+                if (enYear < 18)
+                {
+                    string monthAndDay = enYear + "ปี ";
+                    if (enMonth > 0)
+                    {
+                        monthAndDay = monthAndDay + enMonth + "เดือน ";
+                    }
+
+                    if (enDay > 0)
+                    {
+                        monthAndDay = monthAndDay + enDay + "วัน";
+                    }
+
+                    var confirmResult = MessageBox.Show("คุณ" + person.Th_Firstname + " " + person.Th_Lastname + " อายุไม่ถึง 18ปีบริบูรณ์\nขณะนี้ท่านกำลังอายุ " + monthAndDay + "\n\nกด Yes ถ้าต้องการดำเนินการต่อ\nกด No ถ้าต้องการยกเลิก",
+                                     "แจ้งเตือนอายุไม่ถึง",
+                                     MessageBoxButtons.YesNo);
+                    if (confirmResult == DialogResult.No)
+                    {
+                        label1SetText("");
+                        return;
+                    }
+                }
+
+
                 Console.WriteLine(searchByIdcard);
                 Console.WriteLine(idcard);
                 // ค้นหาHNจากเลขบัตรประชาชน
@@ -233,17 +266,59 @@ namespace C19Kiosk
 
         public async void testLoadData(string hn)
         {
-            // ตรวจสอบ HN
-            string testOpcard = await Task.Run(() => searchFromSmByHn(smConfig.searchOpcardUrl, hn));
+            string testOpcard = "";
+            if (Regex.IsMatch(hn, "-", RegexOptions.IgnoreCase))
+            {
+                // ตรวจสอบ HN
+                testOpcard = await Task.Run(() => searchFromSmByHn(smConfig.searchOpcardUrl, hn));
+            }
+            else
+            {
+                testOpcard = await Task.Run(() => searchFromSmByIdcard(smConfig.searchOpcardUrl, hn));
+            }
+
             if (!string.IsNullOrEmpty(testOpcard))
             {
-                // 
+                
                 responseOpcard resultOpcard = JsonConvert.DeserializeObject<responseOpcard>(testOpcard);
                 if (string.IsNullOrEmpty(resultOpcard.errorMsg))
                 {
-                    Console.WriteLine(resultOpcard.idcard);
-                    Console.WriteLine(resultOpcard.hn);
                     
+                    // คำนวณอายุ
+                    int enDay = int.Parse(Convert.ToDateTime(resultOpcard.dob).ToString("dd"));
+                    int enMonth = int.Parse(Convert.ToDateTime(resultOpcard.dob).ToString("MM"));
+                    int enYear = int.Parse(Convert.ToDateTime(resultOpcard.dob).ToString("yyyy")) - 543;
+                    /*string birthDayEn = person.Birthday.ToString("dd/MM") + "/" + enYear.ToString();*/
+
+                    enDay = 01;
+                    enMonth = 01;
+                    enYear = 2006;
+
+                    DateTime dateOfBirth = new DateTime(enYear, enMonth, enDay);
+                    CalculateAge(dateOfBirth, out enYear, out enMonth, out enDay);
+                    if (enYear < 18)
+                    {
+                        string monthAndDay = enYear + "ปี ";
+                        if (enMonth > 0)
+                        {
+                            monthAndDay = monthAndDay + enMonth + "เดือน ";
+                        }
+
+                        if (enDay > 0)
+                        {
+                            monthAndDay = monthAndDay + enDay + "วัน";
+                        }
+
+                        var confirmResult = MessageBox.Show("คุณ" + resultOpcard.ptname + " อายุไม่ถึง 18ปีบริบูรณ์\nขณะนี้ท่านกำลังอายุ " + monthAndDay + "\n\nกด Yes ถ้าต้องการดำเนินการต่อ\nกด No ถ้าต้องการยกเลิก",
+                                         "แจ้งเตือนอายุไม่ถึง",
+                                         MessageBoxButtons.YesNo);
+                        if (confirmResult == DialogResult.No)
+                        {
+                            label1SetText("");
+                            return;
+                        }
+                    }
+
                     string content = await Task.Run(() => saveVn(resultOpcard.hn));
                     if (!String.IsNullOrEmpty(content))
                     {
@@ -349,16 +424,15 @@ namespace C19Kiosk
                     aTimer.Enabled = true;
 
                     string hn = testGetKeyChar.Trim();
-                    Console.WriteLine(hn);
 
-                    if (!Regex.IsMatch(hn, @"\d+\-\d+", RegexOptions.IgnoreCase))
+                    /*if (!Regex.IsMatch(hn, @"\d+\-\d+", RegexOptions.IgnoreCase))
                     {
                         label1SetText("กรุณาใช้ QR Code ที่เป็น HN โรงพยาบาลเท่านั้น");
                         return;
-                    }
+                    }*/
                     
                     testLoadData(hn);
-                    label1SetText($"ทำการออก VN ผู้ป่วย {hn} เรียบร้อย");
+                    label1SetText("");
                     // ล้างค่า
                     textBox1.Text = hn = testGetKeyChar = "";
                     
@@ -375,6 +449,33 @@ namespace C19Kiosk
         private void textBox1_Click(object sender, EventArgs e)
         {
             label1.Focus();
+        }
+
+        ///
+        /// Calculate the Age of a person given the birthdate.
+        /// https://raasukutty.wordpress.com/2009/06/18/c-calculate-age-in-years-month-and-days/
+        ///
+        static void CalculateAge(DateTime adtDateOfBirth, out int aintNoOfYears, out int aintNoOfMonths, out int aintNoOfDays)
+        {
+            // get current date.
+            DateTime adtCurrentDate = DateTime.Now;
+
+            // find the literal difference
+            aintNoOfDays = adtCurrentDate.Day - adtDateOfBirth.Day;
+            aintNoOfMonths = adtCurrentDate.Month - adtDateOfBirth.Month;
+            aintNoOfYears = adtCurrentDate.Year - adtDateOfBirth.Year;
+
+            if (aintNoOfDays < 0)
+            {
+                aintNoOfDays += DateTime.DaysInMonth(adtCurrentDate.Year, adtCurrentDate.Month);
+                aintNoOfMonths--;
+            }
+
+            if (aintNoOfMonths < 0)
+            {
+                aintNoOfMonths += 12;
+                aintNoOfYears--;
+            }
         }
     }
 
@@ -424,6 +525,7 @@ namespace C19Kiosk
         public string PtRightMain { set; get; }
         public string PtRightSub { set; get; }
         public string errorMsg { set; get; }
+        public string dob { set; get; }
     }
 
     public class resOpcardByIdcard : responseOpcard

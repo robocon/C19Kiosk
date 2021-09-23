@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -88,11 +90,28 @@ namespace C19Kiosk
                 string searchByIdcard = "http://localhost/smbroker/searchOpcardByIdcard.php";
                 string idcard = person.Citizenid;
 
+                // Log Birthday
+                StringBuilder sb = new StringBuilder();
+                sb.Append(idcard + " : " + person.Birthday + "\n");
+                File.AppendAllText("testLog.txt", sb.ToString());
+                sb.Clear();
+                // Log Birthday
+
                 // คำนวณอายุ
                 int enDay = int.Parse(person.Birthday.ToString("dd"));
                 int enMonth = int.Parse(person.Birthday.ToString("MM"));
                 int enYear = int.Parse(person.Birthday.ToString("yyyy")) - 543;
                 /*string birthDayEn = person.Birthday.ToString("dd/MM") + "/" + enYear.ToString();*/
+
+                if (enDay == 0)
+                {
+                    enDay = 1;
+                }
+
+                if (enMonth == 0)
+                {
+                    enMonth = 1;
+                }
 
                 DateTime dateOfBirth = new DateTime(enYear, enMonth, enDay);
                 CalculateAge(dateOfBirth, out enYear, out enMonth, out enDay);
@@ -283,16 +302,11 @@ namespace C19Kiosk
                 responseOpcard resultOpcard = JsonConvert.DeserializeObject<responseOpcard>(testOpcard);
                 if (string.IsNullOrEmpty(resultOpcard.errorMsg))
                 {
-                    
-                    // คำนวณอายุ
-                    int enDay = int.Parse(Convert.ToDateTime(resultOpcard.dob).ToString("dd"));
-                    int enMonth = int.Parse(Convert.ToDateTime(resultOpcard.dob).ToString("MM"));
-                    int enYear = int.Parse(Convert.ToDateTime(resultOpcard.dob).ToString("yyyy")) - 543;
-                    /*string birthDayEn = person.Birthday.ToString("dd/MM") + "/" + enYear.ToString();*/
+                    string dobString = resultOpcard.dob.ToString();
 
-                    enDay = 01;
-                    enMonth = 01;
-                    enYear = 2006;
+                    int enDay = int.Parse(dobString.Substring(0, 2));
+                    int enMonth = int.Parse(dobString.Substring(3, 2));
+                    int enYear = int.Parse(dobString.Substring(6, 4));
 
                     DateTime dateOfBirth = new DateTime(enYear, enMonth, enDay);
                     CalculateAge(dateOfBirth, out enYear, out enMonth, out enDay);

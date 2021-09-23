@@ -50,10 +50,10 @@ namespace C19Kiosk
             drawing.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
 
             //paint the background
-            drawing.Clear(Color.White);
+            drawing.Clear(System.Drawing.Color.White);
 
             //create a brush for the text
-            Brush textBrush = new SolidBrush(Color.Black);
+            Brush textBrush = new SolidBrush(System.Drawing.Color.Black);
 
             drawing.DrawString(text, font, textBrush, new RectangleF(0, 0, 306, setHeight), sf);
 
@@ -98,7 +98,9 @@ namespace C19Kiosk
                 //printer.Image(DrawTextImg($"คิวห้องตรวจ {app.queueNumber}", superBoldv2));
                 //printer.NewLines(3);
 
-                printer.Image(new Bitmap(Bitmap.FromFile("Images/small-icon.bmp")));
+                //printer.Image(new Bitmap(Bitmap.FromFile("Images/small-icon.bmp")));
+                printer.Image(DrawTextImg("ใบตรวจโรค", fontBold));
+                printer.NewLine();
                 printer.Image(DrawTextImg(currDate, fontRegular));
                 printer.Image(DrawTextImg(app.ex, fontRegular));
                 printer.Image(DrawTextImg("HN : " + app.hn, superBoldUnderline));
@@ -107,14 +109,14 @@ namespace C19Kiosk
                 printer.Image(DrawTextImg($"ชื่อ : {app.ptname}", fontBold));
                 printer.NewLine();
                 printer.Image(DrawTextImg($"สิทธิ : {app.ptright}", fontBoldUnderline));
-                if (!String.IsNullOrEmpty(app.hospCode))
+                /*if (!String.IsNullOrEmpty(app.hospCode))
                 {
                     printer.Image(DrawTextImg(app.hospCode, fontRegular));
-                }
+                }*/
 
                 printer.Image(DrawTextImg($"อายุ {app.age}", fontRegular));
                 printer.Image(DrawTextImg($"บัตร ปชช. : {app.idcard}", fontRegular));
-                printer.Image(DrawTextImg(app.mx, fontRegular));
+                //printer.Image(DrawTextImg(app.mx, fontRegular));
                 printer.NewLine();
                 //printer.Image(DrawTextImg($"คิวซักประวัติที่ {app.fakeQueue}", fontBold));
                 //printer.NewLine();
@@ -155,8 +157,8 @@ namespace C19Kiosk
                     }
                 };
                 var barcodeImg = writer2.Write(app.hn);
-                printer.Image(barcodeImg);
-                printer.NewLine();
+                //printer.Image(barcodeImg);
+                //printer.NewLine();
                 printer.Image(DrawTextImg("คิวฉีดวัคซีนที่ ", fontBold));
                 printer.NewLine();
                 printer.Image(DrawTextImg(app.queue_vaccine, superBoldUnderline));
@@ -171,7 +173,7 @@ namespace C19Kiosk
                 printer.Append(PartialCut);
                 // ตัดกระดาษ
 
-                /*
+                
                 printer.Image(DrawTextImg("บัตรคิวสำหรับผู้ป่วย ", fontBoldUnderline));
                 printer.NewLine();
                 printer.Image(DrawTextImg("คิวฉีดวัคซีนที่ ", fontBold));
@@ -180,7 +182,7 @@ namespace C19Kiosk
                 printer.NewLine();
 
                 printer.Image(DrawTextImg("HN : " + app.hn, fontSuperBold));
-                printer.Image(DrawTextImg("VN : " + app.vn, fontSuperBold));
+                //printer.Image(DrawTextImg("VN : " + app.vn, fontSuperBold));
                 printer.NewLine();
 
                 printer.Image(DrawTextImg($"ชื่อ : {app.ptname}", fontBold));
@@ -190,7 +192,7 @@ namespace C19Kiosk
                 
                 printer.NewLines(8);
                 printer.Append(PartialCut);
-                */ 
+                
 
                 //////
                 if (app.queueStatus == "y")

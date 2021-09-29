@@ -213,7 +213,6 @@ namespace C19Kiosk
             catch (Exception ex)
             {
                 label1SetText("ขณะระบบกำลังอ่านบัตรประชาชน ไม่ควรดึงบัตรประชาชนออก\nกรุณาเสียบบัตรประชาชนอีกครั้ง");
-                //MessageBox.Show(ex.ToString());
                 Console.WriteLine(ex.ToString());
             }
             return person;

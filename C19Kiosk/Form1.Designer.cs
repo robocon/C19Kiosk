@@ -51,6 +51,7 @@ namespace C19Kiosk
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -83,9 +84,9 @@ namespace C19Kiosk
             this.label1.Font = new System.Drawing.Font("TH K2D July8", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(8, 144);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(560, 48);
+            this.label1.Size = new System.Drawing.Size(624, 48);
             this.label1.TabIndex = 2;
-            this.label1.Text = "ค้นหาจาก HN หรือเลขบัตรประชาชน";
+            this.label1.Text = "ลงทะเบียนด้วย HN หรือเลขบัตรประชาชน";
             // 
             // button2
             // 
@@ -266,24 +267,24 @@ namespace C19Kiosk
             // 
             // label2
             // 
-            this.label2.Font = new System.Drawing.Font("TH K2D July8", 36F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("TH K2D July8", 33.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.OliveDrab;
-            this.label2.Location = new System.Drawing.Point(576, 232);
+            this.label2.Location = new System.Drawing.Point(656, 160);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(456, 56);
+            this.label2.Size = new System.Drawing.Size(328, 56);
             this.label2.TabIndex = 18;
-            this.label2.Text = "เสียบบัตรประชาชน";
+            this.label2.Text = "แล้วกรุณารอสักครู่";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label4
             // 
-            this.label4.Font = new System.Drawing.Font("TH K2D July8", 36F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("TH K2D July8", 33.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.OliveDrab;
-            this.label4.Location = new System.Drawing.Point(536, 296);
+            this.label4.Location = new System.Drawing.Point(576, 240);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(520, 56);
+            this.label4.Size = new System.Drawing.Size(480, 56);
             this.label4.TabIndex = 19;
-            this.label4.Text = "หรือแสกน QR Code เพื่อใช้งาน";
+            this.label4.Text = "หรือแสกน QR code เพื่อใช้งาน";
             // 
             // pictureBox1
             // 
@@ -295,6 +296,17 @@ namespace C19Kiosk
             this.pictureBox1.TabIndex = 20;
             this.pictureBox1.TabStop = false;
             // 
+            // label5
+            // 
+            this.label5.Font = new System.Drawing.Font("TH K2D July8", 33.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.OliveDrab;
+            this.label5.Location = new System.Drawing.Point(656, 104);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(328, 56);
+            this.label5.TabIndex = 21;
+            this.label5.Text = "เสียบบัตรประชาชน";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -302,6 +314,7 @@ namespace C19Kiosk
             this.AutoScroll = true;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1064, 729);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
@@ -359,6 +372,7 @@ namespace C19Kiosk
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label label5;
     }
 }
 

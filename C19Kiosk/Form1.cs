@@ -34,10 +34,6 @@ namespace C19Kiosk
         string[] cardReaders;
         private void Form1_Load(object sender, EventArgs e)
         {
-            var date1 = new DateTime(1949, 1, 1, 0, 0, 0);
-            //Console.WriteLine(date1.ToString());
-            //paymentNoti.Text = date1.ToString();
-
             DateTime paymentDate = new DateTime(2021,04,27);
             DateTime datetimeNow = DateTime.Now;
             TimeSpan dateDiff = datetimeNow.Subtract(paymentDate);
@@ -55,7 +51,7 @@ namespace C19Kiosk
                 cardReaders = idcard.GetReaders();
                 idcard.MonitorStart(cardReaders[0].ToString());
                 idcard.eventCardInserted += new handleCardInserted(CardInsertedCallback);
-                //idcard.eventCardRemoved += new handleCardRemoved(CardRemoveCallback);
+                idcard.eventCardRemoved += new handleCardRemoved(CardRemoveCallback);
             }
             catch (Exception ex)
             {
@@ -65,6 +61,13 @@ namespace C19Kiosk
             
         }
 
+        private void CardRemoveCallback()
+        {
+            label1SetText("");
+            idcard.MonitorStop(cardReaders[0].ToString());
+            Console.WriteLine("Remove Card : " + cardReaders[0].ToString() + " ");
+        }
+
         private void TimerElapsed(object sender, EventArgs e)
         {
             Console.WriteLine("TimerElapsed: TIME STOPPPPPPP");
@@ -72,16 +75,17 @@ namespace C19Kiosk
             testGetKeyChar = "";
         }
 
-        private async void CardInsertedCallback(Personal personal)
+        private async void CardInsertedCallback(Personal person)
         {
             Console.WriteLine("card was inserted");
-            label1SetText("กำลังอ่านข้อมูลบัตรประชาชน กรุณารอสักครู่...");
+            label1SetText("กำลังอ่านข้อมูลบัตรประชาชน\n!!! ห้ามดึงบัตรประชาชนออก !!!\nกรุณารอสักครู่...");
 
             // ดึงค่าจากบัตรประชาชน
-            var person = await RunCardReadder();
+            person = await RunCardReadder();
             if (person == null)
             {
                 label1SetText("ไม่สามารถอ่านข้อมูลบัตรประชาชนได้ กรุณาเสียบบัตรใหม่อีกครั้ง\nถ้าทำซ้ำแล้วยังใช้งานไม่ได้ท่านสามารถ\n1. กดเลขบัตรประชาชนหรือHNที่ช่องทางด้านซ้ายมือ\n2. กดปุ่มลงทะเบียน");
+                
             }
             else
             {
@@ -90,9 +94,10 @@ namespace C19Kiosk
                 string searchByIdcard = "http://localhost/smbroker/searchOpcardByIdcard.php";
                 string idcard = person.Citizenid;
 
+
                 // Log Birthday
                 StringBuilder sb = new StringBuilder();
-                sb.Append(idcard + " : " + person.Birthday + "\n");
+                sb.Append(idcard + " : " + person.Birthday.ToString("dd/MM/yyyy") + "\n");
                 File.AppendAllText("testLog.txt", sb.ToString());
                 sb.Clear();
                 // Log Birthday
@@ -191,15 +196,26 @@ namespace C19Kiosk
         public async Task<Personal> RunCardReadder()
         {
             Console.WriteLine("get data from cardreader");
-            var person = await Task.Run(() => GetPersonalCardreader());
+            Personal person = await Task.Run(() => GetPersonalCardreader());
             return person;
         }
 
         // ดึงข้อมูลบัตรประชาชน
         public Personal GetPersonalCardreader()
         {
-            idcard = new ThaiIDCard();
-            Personal person = idcard.readAllPhoto();
+            Personal person = null;
+            try
+            {
+                idcard = new ThaiIDCard();
+                //Personal person = idcard.readAllPhoto();
+                person = idcard.readAllPhoto();
+            }
+            catch (Exception ex)
+            {
+                label1SetText("ขณะระบบกำลังอ่านบัตรประชาชน ไม่ควรดึงบัตรประชาชนออก\nกรุณาเสียบบัตรประชาชนอีกครั้ง");
+                //MessageBox.Show(ex.ToString());
+                Console.WriteLine(ex.ToString());
+            }
             return person;
         }
 
@@ -286,7 +302,9 @@ namespace C19Kiosk
         public async void testLoadData(string hn)
         {
             string testOpcard = "";
-            if (Regex.IsMatch(hn, "-", RegexOptions.IgnoreCase))
+
+            Regex rgx = new Regex(@"\-");
+            if (rgx.IsMatch("-"))
             {
                 // ตรวจสอบ HN
                 testOpcard = await Task.Run(() => searchFromSmByHn(smConfig.searchOpcardUrl, hn));

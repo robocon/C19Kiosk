@@ -432,6 +432,7 @@ namespace C19Kiosk
                 var response = await client.PostAsJsonAsync(smConfig.createVnUrl, savevn);
                 response.EnsureSuccessStatusCode();
                 content = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(content);
             }
             catch (Exception ex)
             {

@@ -94,7 +94,6 @@ namespace C19Kiosk
                 string searchByIdcard = "http://localhost/smbroker/searchOpcardByIdcard.php";
                 string idcard = person.Citizenid;
 
-
                 // Log Birthday
                 StringBuilder sb = new StringBuilder();
                 sb.Append(idcard + " : " + person.Birthday.ToString("dd/MM/yyyy") + "\n");
@@ -303,7 +302,7 @@ namespace C19Kiosk
             string testOpcard = "";
 
             Regex rgx = new Regex(@"\-");
-            if (rgx.IsMatch("-"))
+            if (rgx.IsMatch(hn))
             {
                 // ตรวจสอบ HN
                 testOpcard = await Task.Run(() => searchFromSmByHn(smConfig.searchOpcardUrl, hn));

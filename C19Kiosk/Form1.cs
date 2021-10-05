@@ -1,14 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,6 +14,10 @@ namespace C19Kiosk
         static readonly HttpClient client = new HttpClient();
         private ThaiIDCard idcard;
         public Personal person;
+
+        public static string frmSelectDay;
+        public static string frmSelectMonth;
+        public static string frmSelectYear;
 
         // ตัวจับเวลา scan qr code
         private static System.Timers.Timer aTimer;
@@ -37,8 +33,6 @@ namespace C19Kiosk
             DateTime paymentDate = new DateTime(2021,04,27);
             DateTime datetimeNow = DateTime.Now;
             TimeSpan dateDiff = datetimeNow.Subtract(paymentDate);
-            //paymentNoti.Text = "ผ่านมาแล้ว "+dateDiff.Days.ToString()+"วัน ที่โปรแกรมนี้ไม่ได้จ่ายเงิน";
-            //paymentNoti.Text = "พัฒนาระบบโดย นายกฤษณะศักดิ์ กันธรส ติดต่อโทร. 06-1318-1864";
 
             this.KeyPreview = true; //ตั้งค่าเอาไว้ให้มัน focus ที่ key event
             // ฟอร์มโหลด แล้วตั้งเวลาหน่วงไว้ 5วิ
@@ -94,53 +88,64 @@ namespace C19Kiosk
                 string searchByIdcard = "http://localhost/smbroker/searchOpcardByIdcard.php";
                 string idcard = person.Citizenid;
 
+                string personBirthday = "";
+
+                int enDay = 0;
+                int enMonth = 0;
+                int enYear = 0;
+
+                DateTime newBirthday = new DateTime();
+
+                bool completeBirthday = true;
+                string bdError = "";
+
+                // for test
+                try
+                {
+                    //DateTime testDateTimeIdCard = new DateTime(1985, 9, 0);
+                    //Console.WriteLine("Test from Idcard : " + testDateTimeIdCard.ToString("dd/MM/yyyy"));
+
+                    
+                    personBirthday = person.Birthday.ToString("dd/MM/yyyy");
+
+                    enDay = Int32.Parse(person.Birthday.ToString("dd"));
+                    enMonth = Int32.Parse(person.Birthday.ToString("MM"));
+                    enYear = Int32.Parse(person.Birthday.ToString("yyyy"));
+                    enYear = enYear - 543;
+
+                    CheckAgeOver(enDay, enMonth, enYear);
+
+                }
+                catch (Exception ex)
+                {
+
+                    bdError = ex.Message;
+                    completeBirthday = false;
+
+                }
+
+
+                Console.WriteLine("Birthday from Idcard IS : " + personBirthday);
+
+                //DateTime afterBirthday = DateTime.Parse(personBirthday);
+
+                // ยังไม่ได้แก้โค้ดด้านล่าง
+                //return;
+
                 // Log Birthday
-                StringBuilder sb = new StringBuilder();
-                sb.Append(idcard + " : " + person.Birthday.ToString("dd/MM/yyyy") + "\n");
-                File.AppendAllText("testLog.txt", sb.ToString());
-                sb.Clear();
+                //StringBuilder sb = new StringBuilder();
+                //sb.Append(idcard + " : " + person.Birthday.ToString("dd/MM/yyyy") + "\n");
+                //File.AppendAllText("testLog.txt", sb.ToString());
+                //sb.Clear();
                 // Log Birthday
 
                 // คำนวณอายุ
-                int enDay = int.Parse(person.Birthday.ToString("dd"));
-                int enMonth = int.Parse(person.Birthday.ToString("MM"));
-                int enYear = int.Parse(person.Birthday.ToString("yyyy")) - 543;
+                //int enDay = int.Parse(afterBirthday.ToString("dd"));
+                //int enMonth = int.Parse(afterBirthday.ToString("MM"));
+                //int enYear = int.Parse(afterBirthday.ToString("yyyy"));
                 /*string birthDayEn = person.Birthday.ToString("dd/MM") + "/" + enYear.ToString();*/
 
-                if (enDay == 0)
-                {
-                    enDay = 1;
-                }
-
-                if (enMonth == 0)
-                {
-                    enMonth = 1;
-                }
-
-                DateTime dateOfBirth = new DateTime(enYear, enMonth, enDay);
-                CalculateAge(dateOfBirth, out enYear, out enMonth, out enDay);
-                if (enYear < 18)
-                {
-                    string monthAndDay = enYear + "ปี ";
-                    if (enMonth > 0)
-                    {
-                        monthAndDay = monthAndDay + enMonth + "เดือน ";
-                    }
-
-                    if (enDay > 0)
-                    {
-                        monthAndDay = monthAndDay + enDay + "วัน";
-                    }
-
-                    var confirmResult = MessageBox.Show("คุณ" + person.Th_Firstname + " " + person.Th_Lastname + " อายุไม่ถึง 18ปีบริบูรณ์\nขณะนี้ท่านกำลังอายุ " + monthAndDay + "\n\nกด Yes ถ้าต้องการดำเนินการต่อ\nกด No ถ้าต้องการยกเลิก",
-                                     "แจ้งเตือนอายุไม่ถึง",
-                                     MessageBoxButtons.YesNo);
-                    if (confirmResult == DialogResult.No)
-                    {
-                        label1SetText("");
-                        return;
-                    }
-                }
+                
 
 
                 Console.WriteLine(searchByIdcard);
@@ -174,9 +179,33 @@ namespace C19Kiosk
                             }
                             else
                             {
+                                // เลือกวันเดือนปีเกิด
+                                if (completeBirthday == false)
+                                {
+                                    //DateTime testDateTimeIdCard = DateTime.Now;
+                                    Console.WriteLine("Error DateTime from person.Birthdate : " + bdError);
+
+                                    // เลือกวันเดือนปีจากฟอร์ม
+                                    FormSelectDate frmSelect = new FormSelectDate();
+                                    frmSelect.ShowDialog();
+
+                                    //FormSelectDate frm2 = new FormSelectDate();
+
+                                    personBirthday = $"{frmSelectDay}/{frmSelectMonth}/{frmSelectYear}";
+
+                                    enDay = Int32.Parse(frmSelectDay);
+                                    enMonth = Int32.Parse(frmSelectMonth);
+                                    enYear = Int32.Parse(frmSelectYear);
+                                    enYear = enYear - 543;
+                                    newBirthday = DateTime.Parse(personBirthday);
+                                }
+
+                                CheckAgeOver(enDay, enMonth, enYear);
+
                                 SelectedCreateOpcard frm = new SelectedCreateOpcard();
                                 frm.notifyOpcard = resultOpcard.errorMsg;
                                 frm.person = person;
+                                frm.newBirthday = newBirthday;
                                 frm.ShowDialog();
                                 label1SetText("");
                             }
@@ -189,6 +218,44 @@ namespace C19Kiosk
 
                 } // end if is null
             } // else idcard is not null
+        }
+
+        public void CheckAgeOver(Int32 enDay, Int32 enMonth, Int32 enYear)
+        {
+            if (enDay == 0)
+            {
+                enDay = 1;
+            }
+
+            if (enMonth == 0)
+            {
+                enMonth = 1;
+            }
+
+            DateTime dateOfBirth = new DateTime(enYear, enMonth, enDay);
+            CalculateAge(dateOfBirth, out enYear, out enMonth, out enDay);
+            if (enYear < 18)
+            {
+                string monthAndDay = enYear + "ปี ";
+                if (enMonth > 0)
+                {
+                    monthAndDay = monthAndDay + enMonth + "เดือน ";
+                }
+
+                if (enDay > 0)
+                {
+                    monthAndDay = monthAndDay + enDay + "วัน";
+                }
+
+                var confirmResult = MessageBox.Show("คุณ" + person.Th_Firstname + " " + person.Th_Lastname + " อายุไม่ถึง 18ปีบริบูรณ์\nขณะนี้ท่านกำลังอายุ " + monthAndDay + "\n\nกด Yes ถ้าต้องการดำเนินการต่อ\nกด No ถ้าต้องการยกเลิก",
+                                 "แจ้งเตือนอายุไม่ถึง",
+                                 MessageBoxButtons.YesNo);
+                if (confirmResult == DialogResult.No)
+                {
+                    label1SetText("");
+                    return;
+                }
+            }
         }
 
         // Run Card Reader
@@ -521,6 +588,7 @@ namespace C19Kiosk
         public DateTime Birthday { get; set; }
         public DateTime Expire { get; set; }
         public DateTime Issue { get; set; }
+        public DateTime newBirthday { get; set; }
         public string En_Lastname { get; set; }
         public string addrProvince { get; set; }
         public string addrTambol { get; set; }

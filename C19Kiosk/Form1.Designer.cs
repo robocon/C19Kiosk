@@ -52,7 +52,10 @@ namespace C19Kiosk
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.extraInfo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -307,6 +310,25 @@ namespace C19Kiosk
             this.label5.Text = "เสียบบัตรประชาชน";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::C19Kiosk.Properties.Resources.download;
+            this.pictureBox2.Location = new System.Drawing.Point(936, 608);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(120, 120);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 22;
+            this.pictureBox2.TabStop = false;
+            // 
+            // extraInfo
+            // 
+            this.extraInfo.AutoSize = true;
+            this.extraInfo.Location = new System.Drawing.Point(736, 712);
+            this.extraInfo.Name = "extraInfo";
+            this.extraInfo.Size = new System.Drawing.Size(193, 13);
+            this.extraInfo.TabIndex = 23;
+            this.extraInfo.Text = "For more information scan this QR code";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -314,6 +336,8 @@ namespace C19Kiosk
             this.AutoScroll = true;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1064, 729);
+            this.Controls.Add(this.extraInfo);
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label4);
@@ -344,6 +368,7 @@ namespace C19Kiosk
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -373,6 +398,8 @@ namespace C19Kiosk
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Label extraInfo;
     }
 }
 

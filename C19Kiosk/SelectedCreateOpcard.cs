@@ -1,12 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ThaiNationalIDCard;
@@ -17,6 +12,7 @@ namespace C19Kiosk
     {
         public string notifyOpcard;
         public Personal person;
+        public DateTime newBirthday;
         static readonly HttpClient client = new HttpClient();
         static readonly SmConfigure smConfig = new SmConfigure();
 
@@ -52,7 +48,7 @@ namespace C19Kiosk
                 m.En_Lastname = person.En_Lastname;
                 m.Birthday = person.Birthday;
                 m.Sex = person.Sex;
-
+                m.newBirthday = newBirthday;
                 m.Address = person.Address;
                 m.addrHouseNo = person.addrHouseNo;
                 m.addrLane = person.addrLane;
@@ -96,6 +92,8 @@ namespace C19Kiosk
                     var response = await client.PostAsJsonAsync("http://localhost/smbroker/saveOpcard.php", m);
                     response.EnsureSuccessStatusCode();
                     string content = await response.Content.ReadAsStringAsync();
+
+                    Console.WriteLine(content);
                     return content;
 
                 });
